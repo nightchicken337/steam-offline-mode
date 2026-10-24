@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Steam Offline Mode — one-click offline toggle for Steam on Windows</title>
+<meta name="description" content="Free open-source tool that blocks the Steam client in Windows Firewall so Steam starts in Offline Mode. One button, no installer, games keep their internet. MIT licensed.">
+<link rel="canonical" href="https://nightchicken337.github.io/steam-offline-mode/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Steam Offline Mode — one-click offline toggle for Steam">
+<meta property="og:description" content="Blocks the Steam client in Windows Firewall so Steam starts in Offline Mode. One button, no installer, games keep their internet.">
+<meta property="og:url" content="https://nightchicken337.github.io/steam-offline-mode/">
+<meta property="og:image" content="https://nightchicken337.github.io/steam-offline-mode/screenshot.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Steam Offline Mode",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Windows 10, Windows 11",
+  "description": "Blocks the Steam client in Windows Firewall so Steam starts in Offline Mode. Games keep their network access.",
+  "url": "https://nightchicken337.github.io/steam-offline-mode/",
+  "downloadUrl": "https://github.com/nightchicken337/steam-offline-mode/releases/latest",
+  "softwareVersion": "1.0.0",
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<style>
+  :root{
+    --canvas:#fbfbfa; --paper:#f7f6f3; --ink:#111; --soft:#333; --muted:#787774;
+    --line:#eaeaea;
+    --pale-green:#edf3ec; --edge-green:#dce7da; --deep-green:#346538;
+    --pale-red:#fdebec;   --edge-red:#f5d7d9;   --deep-red:#9f2f2d;
+    --sans:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,sans-serif;
+    --serif:"Instrument Serif","Playfair Display",Constantia,Georgia,serif;
+    --mono:"Cascadia Mono",Consolas,"SF Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--canvas);color:var(--ink);
+    font-family:var(--sans);font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 28px}
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.34em;
+    color:var(--muted);text-transform:uppercase;margin:0 0 18px;
+  }
+  h1{
+    font-family:var(--serif);font-weight:400;font-size:clamp(44px,8vw,76px);
+    line-height:1.04;letter-spacing:-.02em;margin:0 0 20px;
+  }
+  h2{
+    font-family:var(--serif);font-weight:400;font-size:clamp(26px,4vw,34px);
+    letter-spacing:-.02em;line-height:1.2;margin:0 0 18px;
+  }
+  h3{font-size:16px;font-weight:600;margin:0 0 6px}
+  p{margin:0 0 16px;max-width:62ch}
+  a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:#c9c9c6}
+  a:hover{text-decoration-color:var(--ink)}
+  section{padding:76px 0;border-top:1px solid var(--line)}
+  header{padding:96px 0 76px}
+  .lede{font-size:19px;color:var(--soft);max-width:60ch}
+
+  .cta{
+    display:inline-block;background:var(--ink);color:#fff;text-decoration:none;
+    padding:17px 30px;border-radius:6px;font-weight:600;font-size:15px;
+    letter-spacing:.02em;transition:transform .15s cubic-bezier(.16,1,.3,1),opacity .15s;
+  }
+  .cta:hover{opacity:.86}
+  .cta:active{transform:scale(.98)}
+  .cta-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:30px}
+  .cta-note{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+  .shot{margin:44px 0 0}
+  .shot img{max-width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line)}
+  figcaption{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:12px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .grid div{background:var(--canvas);padding:26px}
+  .grid p{font-size:14.5px;color:var(--muted);margin:0}
+
+  .states{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 28px}
+  .state{flex:1 1 240px;border-radius:10px;padding:20px 22px}
+  .state.on{background:var(--pale-green);border:1px solid var(--edge-green)}
+  .state.off{background:var(--pale-red);border:1px solid var(--edge-red)}
+  .state b{font-family:var(--serif);font-weight:400;font-size:34px;display:block;line-height:1.1}
+  .state.on b{color:var(--deep-green)}
+  .state.off b{color:var(--deep-red)}
+  .state span{font-size:14px;color:var(--soft)}
+
+  pre{
+    background:var(--paper);border:1px solid var(--line);border-radius:8px;
+    padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55;margin:0 0 16px;
+  }
+  code{font-family:var(--mono);font-size:.92em;background:var(--paper);padding:2px 6px;border-radius:4px}
+  pre code{background:none;padding:0}
+
+  details{border-bottom:1px solid var(--line);padding:18px 0}
+  details summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";color:var(--muted);font-weight:400}
+  details[open] summary::after{content:"\2212"}
+  details p{margin:14px 0 0;color:var(--soft);font-size:15px}
+
+  footer{padding:56px 0 76px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .ru{color:var(--soft)}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <p class="eyebrow">Windows&nbsp;10 / 11 &middot; Free &amp; open source</p>
+  <h1>Steam Offline Mode</h1>
+  <p class="lede">
+    One button puts Steam into Offline Mode by blocking the Steam client in
+    Windows Firewall. Your games keep their internet. Click again to go back
+    online.
+  </p>
+  <div class="cta-row">
+    <a class="cta" href="https://github.com/nightchicken337/steam-offline-mode/releases/latest/download/SteamOffline.exe">Download SteamOffline.exe</a>
+    <a class="cta" style="background:transparent;color:var(--ink);border:1px solid var(--ink)" href="https://github.com/nightchicken337/steam-offline-mode">Source on GitHub</a>
+  </div>
+  <p class="cta-note">137 KB &middot; no installer &middot; MIT licence</p>
+
+  <figure class="shot">
+    <img src="screenshot.png" width="440" height="506"
+         alt="Steam Offline Mode app window showing the Offline state in red with a GO ONLINE button">
+    <figcaption>The whole application. That is the entire interface.</figcaption>
+  </figure>
+</header>
+
+<section class="wrap">
+  <h2>What it does</h2>
+  <div class="states">
+    <div class="state on"><b>Online</b><span>Steam reaches the network normally.</span></div>
+    <div class="state off"><b>Offline</b><span>Steam is cut off. Games are unaffected.</span></div>
+  </div>
+  <p>
+    Steam has a built-in Offline Mode, but it refuses to offer it while it can
+    still see the internet. This tool removes that: it writes Windows Firewall
+    rules for the three Steam client executables, so Steam concludes there is no
+    connection and starts offline. Nothing else on the machine loses network
+    access &mdash; not your browser, not your games, not other launchers.
+  </p>
+  <div class="grid">
+    <div><h3>One button</h3><p>Same button goes offline and comes back. No modes, no settings to learn.</p></div>
+    <div><h3>No installer</h3><p>A single 137 KB executable. Delete the file and it is gone.</p></div>
+    <div><h3>Games stay online</h3><p>Only the Steam client is blocked. Multiplayer keeps working.</p></div>
+    <div><h3>Restarts Steam</h3><p>Optional. Steam caches its network state, so a restart is what makes the change take effect.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>How to use it</h2>
+  <p>
+    Download <code>SteamOffline.exe</code>, run it, press the button. It asks for
+    administrator rights because firewall rules cannot be written without them.
+    Close Steam first, or leave the restart option on and it is handled for you.
+  </p>
+  <p>
+    To undo everything without the app, open PowerShell as administrator:
+  </p>
+  <pre><code>Get-NetFirewallRule -DisplayName "SteamOfflineMode*" | Remove-NetFirewallRule</code></pre>
+  <p>
+    Every rule the app creates carries the <code>SteamOfflineMode</code> prefix,
+    so that single command removes all of them and nothing else.
+  </p>
+</section>
+
+<section class="wrap">
+  <h2>Is it safe</h2>
+  <p>
+    It asks for administrator rights, which is a fair reason to be suspicious.
+    So, precisely: it creates firewall rules for three Steam executables and
+    reads the registry to find where Steam is installed. It does not connect to
+    the internet, install services, add startup entries, or write to the
+    registry.
+  </p>
+  <p>
+    The released binary is built by GitHub Actions on a clean runner straight
+    from the public source, not on somebody's desktop. The build log is public
+    and a SHA256 file sits next to the download. If that is still not enough,
+    the whole program is about 500 lines of C# you can read, and
+    <code>build.ps1</code> compiles it with the compiler that already ships with
+    Windows &mdash; no SDK, no package manager.
+  </p>
+  <p>
+    It is not code-signed, because certificates cost money. Windows SmartScreen
+    will show a blue warning for it, as it does for any unsigned program:
+    <em>More info</em> &rarr; <em>Run anyway</em>. Building it yourself avoids
+    the warning entirely.
+  </p>
+</section>
+
+<section class="wrap">
+  <h2>Questions</h2>
+
+  <details>
+    <summary>Will this get my account banned?</summary>
+    <p>
+      No. Offline Mode is a normal Steam feature, and blocking an application in
+      your own firewall is a normal thing to do with your own computer. Nothing
+      is patched, injected, or modified inside Steam.
+    </p>
+  </details>
+
+  <details>
+    <summary>Can I still play multiplayer games?</summary>
+    <p>
+      Yes. Only the Steam client's own executables are blocked. Game
+      executables under <code>steamapps\common</code> keep full network access.
+      Games that authenticate through the Steam client itself will of course
+      notice that it is offline.
+    </p>
+  </details>
+
+  <details>
+    <summary>Steam does not offer Offline Mode, it just shows an error</summary>
+    <p>
+      Steam needs to have logged in online at least once with "remember my
+      password" before it will offer Offline Mode. Go back online, sign in
+      normally with that box ticked, then switch off again.
+    </p>
+  </details>
+
+  <details>
+    <summary>How do I remove it?</summary>
+    <p>
+      Press the button to go back online, then delete the executable. If you
+      want to be thorough, the PowerShell command above removes every rule it
+      ever created.
+    </p>
+  </details>
+
+  <details>
+    <summary>Does it work on Windows 10?</summary>
+    <p>
+      Yes, Windows 10 and 11. It needs .NET Framework 4.8, which both ship with
+      by default.
+    </p>
+  </details>
+
+  <details>
+    <summary class="ru">По-русски: что это такое</summary>
+    <p class="ru">
+      Программа отрезает от сети только клиент Steam правилами брандмауэра
+      Windows, поэтому Steam запускается в офлайн-режиме. Интернет на
+      компьютере и сами игры при этом работают. Одна кнопка переключает туда и
+      обратно. Требуются права администратора, иначе правила брандмауэра не
+      записать. Установка не нужна, это один файл; удаляется удалением файла.
+    </p>
+  </details>
+</section>
+
+<footer class="wrap">
+  MIT licence &middot;
+  <a href="https://github.com/nightchicken337/steam-offline-mode">github.com/nightchicken337/steam-offline-mode</a>
+  <br>Not affiliated with Valve Corporation. Steam is a trademark of Valve Corporation.
+</footer>
+
+</body>
+</html>
