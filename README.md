@@ -1,5 +1,8 @@
 # Steam Offline Mode
 
+**[Скачать](https://github.com/nightchicken337/steam-offline-mode/releases/latest/download/SteamOffline.exe)**
+ · **[Сайт проекта](https://nightchicken337.github.io/steam-offline-mode/)**
+
 Отрезает от сети только клиент Steam — правилами брандмауэра Windows. Steam не
 видит интернет и запускается в Offline Mode. Остальной интернет и сами игры не
 трогаются.
