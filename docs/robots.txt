@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://nightchicken337.github.io/steam-offline-mode/sitemap.xml
