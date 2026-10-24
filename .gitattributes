@@ -1,0 +1,15 @@
+# Windows-only project: keep the scripts CRLF so .bat files survive a clone
+# on any platform, and stop git from guessing.
+* text=auto
+
+*.ps1      text eol=crlf
+*.bat      text eol=crlf
+*.cmd      text eol=crlf
+*.cs       text eol=crlf
+*.manifest text eol=crlf
+
+*.md  text eol=lf
+*.yml text eol=lf
+
+*.ico binary
+*.exe binary

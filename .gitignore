@@ -1,0 +1,12 @@
+# build output - the binary ships through GitHub Releases, not through git
+dist/
+
+# generated from src/make-icon.ps1 during the build
+src/icon.ico
+
+# editor / OS noise
+.vs/
+*.user
+*.suo
+Thumbs.db
+desktop.ini
